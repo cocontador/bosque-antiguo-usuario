@@ -20,8 +20,8 @@ public class UsuarioService {
     private final PasswordEncoder passwordEncoder;
 
     public UsuarioService(UsuarioRepository usuarioRepository,
-                          RolService rolService, // ✅ Inyección RolService
-                          PasswordEncoder passwordEncoder) {
+            RolService rolService, // ✅ Inyección RolService
+            PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
         this.rolService = rolService;
         this.passwordEncoder = passwordEncoder;
@@ -36,8 +36,8 @@ public class UsuarioService {
     @Transactional(readOnly = true) // ✅ Mejor práctica para lectura
     public Usuario obtenerUsuarioPorId(Long id) {
         return usuarioRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado con ID: " + id));
+                .orElseThrow(
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado con ID: " + id));
     }
 
     // ================= CREAR / REGISTRAR =================
@@ -62,7 +62,8 @@ public class UsuarioService {
     public Usuario actualizarUsuario(Long id, Usuario cambios) {
         Usuario u = obtenerUsuarioPorId(id);
 
-        if (cambios.getNombre() != null) u.setNombre(cambios.getNombre());
+        if (cambios.getNombre() != null)
+            u.setNombre(cambios.getNombre());
         if (cambios.getEmail() != null && !cambios.getEmail().equalsIgnoreCase(u.getEmail())) {
             usuarioRepository.findByEmail(cambios.getEmail()).ifPresent(x -> {
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "El email ya está registrado");
@@ -74,9 +75,12 @@ public class UsuarioService {
         }
 
         // 🚨 Estos campos ya existen en Usuario.java después de la corrección 1
-        if (cambios.getDireccion() != null) u.setDireccion(cambios.getDireccion());
-        if (cambios.getRut() != null) u.setRut(cambios.getRut());
-        if (cambios.getApellido() != null) u.setApellido(cambios.getApellido());
+        if (cambios.getDireccion() != null)
+            u.setDireccion(cambios.getDireccion());
+        if (cambios.getRut() != null)
+            u.setRut(cambios.getRut());
+        if (cambios.getApellido() != null)
+            u.setApellido(cambios.getApellido());
         // si quieres permitir cambiar activo:
         // u.setActivo(cambios.isActivo());
 

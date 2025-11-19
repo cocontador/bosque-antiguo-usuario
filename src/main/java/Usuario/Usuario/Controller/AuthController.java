@@ -30,11 +30,12 @@ public class AuthController {
     // private final PasswordEncoder encoder;
 
     public AuthController(AuthenticationManager authManager,
-                          JpaUserDetailsService uds,
-                          JwtUtils jwt,
-                          UsuarioService usuarioService,
-                          // Eliminados en el constructor: UsuarioRepository usuarioRepository, PasswordEncoder encoder
-                          PasswordEncoder encoder) { // Se mantiene encoder solo si se usa en alguna parte
+            JpaUserDetailsService uds,
+            JwtUtils jwt,
+            UsuarioService usuarioService,
+            // Eliminados en el constructor: UsuarioRepository usuarioRepository,
+            // PasswordEncoder encoder
+            PasswordEncoder encoder) { // Se mantiene encoder solo si se usa en alguna parte
         this.authManager = authManager;
         this.uds = uds;
         this.jwt = jwt;
@@ -47,8 +48,7 @@ public class AuthController {
     public Map<String, Object> login(@RequestBody LoginRequest body) {
         // Autentica credenciales (email/password)
         authManager.authenticate(new UsernamePasswordAuthenticationToken(
-                body.getEmail(), body.getPassword()
-        ));
+                body.getEmail(), body.getPassword()));
 
         UserDetails user = uds.loadUserByUsername(body.getEmail());
         String access = jwt.generateAccessToken(user);
@@ -59,12 +59,14 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody UsuarioRegistroRequest req) {
-        // Usa tu service para validar, crear, cifrar pass y asignar rol
-        Usuario creado = usuarioService.registrarUsuario(req.getUsuario(), req.getNombreRol());
+    public ResponseEntity<Usuario> register(
+            @RequestBody Usuario usuario, // ⬅️ Esperar solo la entidad Usuario en el BODY
+            @RequestParam(defaultValue = "CLIENTE") String rol // ⬅️ Recibir el rol por QUERY PARAM
+    ) {
+        // 1. Llamar al servicio con el objeto Usuario y el rol del RequestParam
+        Usuario creado = usuarioService.registrarUsuario(usuario, rol);
 
-        // Se recomienda devolver el token, pero se mantiene tu respuesta original:
-        // No devolvemos passwordHash al front: limpiamos (Esto debe ir en el Assembler, pero aquí es la única salida JSON)
+        // 2. Limpieza y respuesta
         creado.setPasswordHash("**hidden**");
         return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }

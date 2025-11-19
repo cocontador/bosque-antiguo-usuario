@@ -12,17 +12,9 @@ import lombok.Data;
 @Schema(description = "Datos para registrar un nuevo usuario con su rol asociado")
 public class UsuarioRegistroRequest {
 
-    @Schema(
-            description = "Objeto con los datos del nuevo usuario (nombre, email, contraseña, etc.)",
-            implementation = Usuario.class,
-            required = true
-    )
-    private Usuario usuario;
+        @Schema(description = "Objeto con los datos del nuevo usuario (nombre, email, contraseña, etc.)", implementation = Usuario.class, required = true)
+        private Usuario usuario;
 
-    @Schema(
-            description = "Nombre del rol que se asignará al usuario",
-            example = "CLIENTE",
-            required = true
-    )
-    private String nombreRol;
+        @Schema(description = "Nombre del rol que se asignará al usuario", example = "CLIENTE", required = true)
+        private String nombreRol;
 }
