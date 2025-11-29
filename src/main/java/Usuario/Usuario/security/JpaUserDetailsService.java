@@ -26,7 +26,7 @@ public class JpaUserDetailsService implements UserDetailsService {
 
         // ✅ CORRECCIÓN: Usar .collect(Collectors.toList()) en lugar de .toList()
         List<GrantedAuthority> authorities = usuario.getRoles().stream()
-                .map(rol -> new SimpleGrantedAuthority("ROLE_" + rol.getNombre().toUpperCase()))
+                .map(rol -> new SimpleGrantedAuthority( rol.getNombre().toUpperCase()))
                 .collect(Collectors.toList());
 
         return new org.springframework.security.core.userdetails.User(

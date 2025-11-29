@@ -69,8 +69,16 @@ public class AuthController {
         String access = jwt.generateAccessToken(user);
         String refresh = jwt.generateRefreshToken(user.getUsername());
         var roles = user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
+        
+        // Tomar el primer rol (asumiendo que hay solo uno por usuario)
+        String primaryRole = roles.isEmpty() ? "CLIENTE" : roles.get(0);
 
-        return Map.of("token", access, "refreshToken", refresh, "roles", roles);
+        return Map.of(
+            "token", access, 
+            "refreshToken", refresh, 
+            "roles", roles,
+            "role", primaryRole  // Frontend espera "role" en singular
+        );
     }
 
     @Operation(summary = "Registrar usuario", description = "Crea un nuevo usuario en el sistema")

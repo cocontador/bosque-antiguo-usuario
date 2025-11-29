@@ -1,26 +1,19 @@
 ﻿package Usuario.Usuario.model;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Rol {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id 
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "rol_seq")
+    @SequenceGenerator(name = "rol_seq", sequenceName = "ROL_SEQ", allocationSize = 1)
     private Integer id;
 
     @Column(unique = true, nullable = false)
     private String nombre; // ADMIN, VENDEDOR, CLIENTE
-
-    // ✅ RECOMENDACIÓN: Constructor por defecto
-    public Rol() {
-    }
-
-    public Rol(String nombre) {
-        this.nombre = nombre;
-    }
-
-    // getters y setters
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
 }
