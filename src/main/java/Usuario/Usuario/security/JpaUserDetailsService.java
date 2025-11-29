@@ -1,4 +1,4 @@
-﻿package Usuario.Usuario.security;
+package Usuario.Usuario.security;
 
 import Usuario.Usuario.model.Usuario;
 import Usuario.Usuario.repository.UsuarioRepository;

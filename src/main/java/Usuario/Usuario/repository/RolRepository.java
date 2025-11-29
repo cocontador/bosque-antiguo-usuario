@@ -1,4 +1,4 @@
-﻿package Usuario.Usuario.repository;
+package Usuario.Usuario.repository;
 
 import Usuario.Usuario.model.Rol;
 import org.springframework.data.jpa.repository.JpaRepository;
