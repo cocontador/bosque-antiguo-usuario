@@ -1,4 +1,4 @@
-package Usuario.Usuario.security;
+﻿package Usuario.Usuario.security;
 
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;

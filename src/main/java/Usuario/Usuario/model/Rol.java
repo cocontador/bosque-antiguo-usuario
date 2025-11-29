@@ -1,4 +1,4 @@
-package Usuario.Usuario.model;
+﻿package Usuario.Usuario.model;
 
 import jakarta.persistence.*;
 
