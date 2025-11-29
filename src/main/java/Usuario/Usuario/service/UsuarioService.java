@@ -73,7 +73,7 @@ public class UsuarioService {
             u.setPasswordHash(passwordEncoder.encode(cambios.getPasswordHash()));
         }
 
-        // 🚨 Estos campos ya existen en Usuario.java después de la corrección 1
+        // Estos campos ya existen en Usuario.java después de la corrección 1
         if (cambios.getDireccion() != null) u.setDireccion(cambios.getDireccion());
         if (cambios.getRut() != null) u.setRut(cambios.getRut());
         if (cambios.getApellido() != null) u.setApellido(cambios.getApellido());

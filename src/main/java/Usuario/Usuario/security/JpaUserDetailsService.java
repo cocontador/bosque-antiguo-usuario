@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors; // 💡 ¡Añadir este import!
+import java.util.stream.Collectors; // Añadir este import
 
 @Service
 public class JpaUserDetailsService implements UserDetailsService {
