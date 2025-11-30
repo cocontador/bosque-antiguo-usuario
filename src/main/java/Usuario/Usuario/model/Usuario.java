@@ -1,13 +1,20 @@
 package Usuario.Usuario.model;
 
 import jakarta.persistence.*;
+import lombok.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Usuario {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id 
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "usuario_seq")
+    @SequenceGenerator(name = "usuario_seq", sequenceName = "USUARIO_SEQ", allocationSize = 1)
     private Long id;
 
     @Column(unique = true, nullable = false, length = 150)
@@ -17,6 +24,7 @@ public class Usuario {
     private String passwordHash;
 
     @Column(nullable = false)
+    @Builder.Default
     private boolean activo = true;
 
     @Column(length = 120)
@@ -36,29 +44,6 @@ public class Usuario {
     @JoinTable(name = "usuario_rol",
             joinColumns = @JoinColumn(name = "usuario_id"),
             inverseJoinColumns = @JoinColumn(name = "rol_id"))
+    @Builder.Default
     private Set<Rol> roles = new HashSet<>();
-
-    // ✅ CORRECCIÓN: Constructor por defecto (necesario para JPA/Jackson)
-    public Usuario() {
-    }
-
-    // Getters y setters (incluyendo los nuevos campos)
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-    public String getPasswordHash() { return passwordHash; }
-    public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
-    public boolean isActivo() { return activo; }
-    public void setActivo(boolean activo) { this.activo = activo; }
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
-    public String getDireccion() { return direccion; }
-    public void setDireccion(String direccion) { this.direccion = direccion; }
-    public String getRut() { return rut; }
-    public void setRut(String rut) { this.rut = rut; }
-    public String getApellido() { return apellido; }
-    public void setApellido(String apellido) { this.apellido = apellido; }
-    public Set<Rol> getRoles() { return roles; }
-    public void setRoles(Set<Rol> roles) { this.roles = roles; }
 }

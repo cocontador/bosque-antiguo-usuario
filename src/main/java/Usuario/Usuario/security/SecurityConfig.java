@@ -22,17 +22,16 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtFilter;
-    private final UserDetailsService uds;
 
-    public SecurityConfig(JwtAuthFilter jwtFilter, UserDetailsService uds) {
-        this.jwtFilter = jwtFilter; this.uds = uds;
+    public SecurityConfig(JwtAuthFilter jwtFilter) {
+        this.jwtFilter = jwtFilter;
     }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // ⚠️ Permitir el origen de tu frontend en desarrollo
+        // Permitir el origen de tu frontend en desarrollo
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
 
         // Métodos permitidos para las peticiones (GET, POST, etc.)

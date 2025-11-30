@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors; // 💡 ¡Añadir este import!
+import java.util.stream.Collectors; // Añadir este import
 
 @Service
 public class JpaUserDetailsService implements UserDetailsService {
@@ -26,7 +26,7 @@ public class JpaUserDetailsService implements UserDetailsService {
 
         // ✅ CORRECCIÓN: Usar .collect(Collectors.toList()) en lugar de .toList()
         List<GrantedAuthority> authorities = usuario.getRoles().stream()
-                .map(rol -> new SimpleGrantedAuthority("ROLE_" + rol.getNombre().toUpperCase()))
+                .map(rol -> new SimpleGrantedAuthority( rol.getNombre().toUpperCase()))
                 .collect(Collectors.toList());
 
         return new org.springframework.security.core.userdetails.User(
