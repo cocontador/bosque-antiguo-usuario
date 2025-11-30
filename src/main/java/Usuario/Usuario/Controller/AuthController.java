@@ -3,6 +3,7 @@ package Usuario.Usuario.Controller;
 import Usuario.Usuario.dto.LoginRequest;
 import Usuario.Usuario.dto.UsuarioRegistroRequest;
 import Usuario.Usuario.model.Usuario;
+import Usuario.Usuario.repository.UsuarioRepository;
 import Usuario.Usuario.security.JpaUserDetailsService;
 import Usuario.Usuario.security.JwtUtils;
 import Usuario.Usuario.service.UsuarioService;
@@ -20,7 +21,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -34,22 +34,18 @@ public class AuthController {
     private final JpaUserDetailsService uds;
     private final JwtUtils jwt;
     private final UsuarioService usuarioService;
-    // Eliminadas inyecciones no usadas (UsuarioRepository y PasswordEncoder)
-    // private final UsuarioRepository usuarioRepository;
-    // private final PasswordEncoder encoder;
+    private final UsuarioRepository usuarioRepository;
 
     public AuthController(AuthenticationManager authManager,
                           JpaUserDetailsService uds,
                           JwtUtils jwt,
                           UsuarioService usuarioService,
-                          // Eliminados en el constructor: UsuarioRepository usuarioRepository, PasswordEncoder encoder
-                          PasswordEncoder encoder) { // Se mantiene encoder solo si se usa en alguna parte
+                          UsuarioRepository usuarioRepository) {
         this.authManager = authManager;
         this.uds = uds;
         this.jwt = jwt;
         this.usuarioService = usuarioService;
-        // this.usuarioRepository = usuarioRepository;
-        // this.encoder = encoder;
+        this.usuarioRepository = usuarioRepository;
     }
 
     @Operation(summary = "Iniciar sesión", description = "Autentica un usuario y devuelve un JWT")
@@ -66,7 +62,12 @@ public class AuthController {
         ));
 
         UserDetails user = uds.loadUserByUsername(body.getEmail());
-        String access = jwt.generateAccessToken(user);
+        
+        // Obtener el Usuario completo para acceder al ID
+        Usuario usuario = usuarioRepository.findByEmail(body.getEmail())
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        
+        String access = jwt.generateAccessToken(user, usuario.getId());
         String refresh = jwt.generateRefreshToken(user.getUsername());
         var roles = user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
         
@@ -107,6 +108,11 @@ public class AuthController {
     public Map<String, String> refresh(@RequestBody Map<String, String> body) {
         String username = jwt.getUsername(body.get("refreshToken"));
         UserDetails user = uds.loadUserByUsername(username);
-        return Map.of("token", jwt.generateAccessToken(user));
+        
+        // Obtener el Usuario completo para acceder al ID
+        Usuario usuario = usuarioRepository.findByEmail(username)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        
+        return Map.of("token", jwt.generateAccessToken(user, usuario.getId()));
     }
 }

@@ -40,6 +40,23 @@ public class JwtUtils {
                 .signWith(getSigningKey())
                 .compact();
     }
+    
+    // Nuevo método que incluye userId
+    public String generateAccessToken(UserDetails user, Long userId) {
+        Map<String,Object> claims = new HashMap<>();
+        claims.put("roles", user.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)                
+                .toList());
+        claims.put("userId", userId.toString()); // Agregar userId como claim
+        
+        return Jwts.builder()
+                .claims(claims)
+                .subject(user.getUsername())
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(getSigningKey())
+                .compact();
+    }
 
     public String generateRefreshToken(String username) {
         return Jwts.builder()
