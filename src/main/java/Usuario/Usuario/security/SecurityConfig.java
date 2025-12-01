@@ -3,7 +3,7 @@ package Usuario.Usuario.security;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,28 +29,20 @@ public class SecurityConfig {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
+        CorsConfiguration config = new CorsConfiguration();
 
-        // Permitir el origen de tu frontend en desarrollo y producción
-        configuration.setAllowedOrigins(Arrays.asList(
+        config.setAllowCredentials(true);
+        config.setAllowedOrigins(List.of(
             "http://localhost:5173",
             "http://bosque-antiguo-front.s3-website-us-east-1.amazonaws.com",
             "https://bosque-antiguo-front.s3-website-us-east-1.amazonaws.com"
         ));
-
-        // Métodos permitidos para las peticiones (GET, POST, etc.)
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-
-        // Headers permitidos (necesitas Content-Type y Authorization para JWT)
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With"));
-
-        // Permite el envío de cookies o credenciales (importante para sesiones/JWT)
-        configuration.setAllowCredentials(true);
+        config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","PATCH","OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        // Aplicar esta configuración a todas las rutas (/**)
-        source.registerCorsConfiguration("/**", configuration);
-
+        source.registerCorsConfiguration("/**", config);
+        
         return source;
     }
     @Bean
