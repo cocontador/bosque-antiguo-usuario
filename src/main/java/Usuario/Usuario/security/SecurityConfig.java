@@ -31,8 +31,12 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // Permitir el origen de tu frontend en desarrollo
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
+        // Permitir el origen de tu frontend en desarrollo y producción
+        configuration.setAllowedOrigins(Arrays.asList(
+            "http://localhost:5173",
+            "http://bosque-antiguo-front.s3-website-us-east-1.amazonaws.com",
+            "https://bosque-antiguo-front.s3-website-us-east-1.amazonaws.com"
+        ));
 
         // Métodos permitidos para las peticiones (GET, POST, etc.)
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
